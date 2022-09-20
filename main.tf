@@ -6,7 +6,7 @@ locals{
 #Create internet gateway routes
 resource "aws_route" "internet_gateway_route" {
   route_table_id              = local.route_table_id
-  for_each                    = var.internet_gateway_routes
+  for_each                    = local.internet_gateway_routes
   destination_cidr_block      = each.value.cidr_block
   gateway_id                  = each.key
 }
@@ -14,7 +14,7 @@ resource "aws_route" "internet_gateway_route" {
 #Create egress only internet gateway routes
 resource "aws_route" "egress_only_internet_gateway_routes" {
   route_table_id              = local.route_table_id
-  for_each                    = var.egress_only_internet_gateway_routes
+  for_each                    = local.egress_only_internet_gateway_routes
   destination_ipv6_cidr_block = each.value.ipv6_cidr_block
   egress_only_gateway_id      = each.key
 }
@@ -22,7 +22,7 @@ resource "aws_route" "egress_only_internet_gateway_routes" {
 #Create vpn gateway routes
 resource "aws_route" "vpn_gateway_routes" {
   route_table_id              = local.route_table_id
-  for_each                    = var.vpn_gateway_routes
+  for_each                    = local.vpn_gateway_routes
   destination_ipv6_cidr_block = each.value.ipv6_cidr_block
   destination_cidr_block      = each.value.cidr_block
   gateway_id                  = each.key
@@ -31,15 +31,15 @@ resource "aws_route" "vpn_gateway_routes" {
 #Create NAT gateway routes
 resource "aws_route" "nat_gateway_routes" {
   route_table_id              = local.route_table_id
-  for_each                    = var.nat_gateway_routes
+  for_each                    = local.nat_gateway_routes
   destination_cidr_block      = each.value.cidr_block
-  nat_gateway_id                  = each.key
+  nat_gateway_id              = each.key
 }
 
 #Create VPC peering routes
 resource "aws_route" "vpc_peering_routes" {
   route_table_id              = local.route_table_id
-  for_each                    = var.vpc_peering_routes
+  for_each                    = local.vpc_peering_routes
   destination_ipv6_cidr_block = each.value.ipv6_cidr_block
   destination_cidr_block      = each.value.cidr_block
   vpc_peering_connection_id   = each.key
@@ -48,7 +48,7 @@ resource "aws_route" "vpc_peering_routes" {
 #Attaches VPC endpoint routes to route table
 resource "aws_vpc_endpoint_route_table_association" "vpc_endpoint_routes" {
   route_table_id              = local.route_table_id
-  for_each                    = var.vpc_endpoint_routes
+  for_each                    = local.vpc_endpoint_routes
   vpc_endpoint_id             = each.key
 }
 
@@ -56,7 +56,7 @@ resource "aws_vpc_endpoint_route_table_association" "vpc_endpoint_routes" {
 #WARNING: Must set up Transit gateway VPC attachment for this to work
 resource "aws_route" "transit_gateway_routes" {
   route_table_id              = local.route_table_id
-  for_each                    = var.transit_gateway_routes
+  for_each                    = local.transit_gateway_routes
   destination_cidr_block      = each.value.cidr_block
   destination_ipv6_cidr_block = each.value.ipv6_cidr_block
   destination_prefix_list_id  = each.value.destination_prefix_list_id
@@ -66,7 +66,7 @@ resource "aws_route" "transit_gateway_routes" {
 #Set up Carrier Gateway routes
 resource "aws_route" "carrier_gateway_routes" {
   route_table_id              = local.route_table_id
-  for_each                    = var.carrier_gateway_routes
+  for_each                    = local.carrier_gateway_routes
   destination_cidr_block      = each.value.cidr_block
   destination_ipv6_cidr_block = each.value.ipv6_cidr_block
   destination_prefix_list_id  = each.value.destination_prefix_list_id
@@ -76,7 +76,7 @@ resource "aws_route" "carrier_gateway_routes" {
 #Set up route to Network Interface
 resource "aws_route" "network_interface_routes" {
   route_table_id              = local.route_table_id
-  for_each                    = var.network_interface_routes
+  for_each                    = local.network_interface_routes
   destination_cidr_block      = each.value.cidr_block
   destination_ipv6_cidr_block = each.value.ipv6_cidr_block
   destination_prefix_list_id  = each.value.destination_prefix_list_id
