@@ -47,7 +47,7 @@ locals {
   nat_gateway_routes = {
     for route in item.routes: 
       #Must set destination in route to either the key of a NAT gateway in the nat_gateway variable, or the ID of a NAT gateway
-      lookup(var.nat_gateways,route.destination,null) != null ? var.nat_gateways[route.destination].id : route.destination
+      lookup(var.nat_gateways,route.destination,null) != null ? var.nat_gateways[route.destination].id : route.destination =>
       {
         "cidr_block"                 = length(regexall("\\.",route.target)) > 0 ? route.target : null
         "destination_prefix_list_id" = length(regexall("^pl-",route.target)) > 0 ? route.target : null
@@ -59,7 +59,7 @@ locals {
   vpc_peering_routes = {
     for route in item.routes: 
       #Must set destination in route to either the key of a VPC peering connection in the var.vpc_peering_connections variable, or the ID of a VPC peering connection
-      lookup(var.vpc_peering_connections,route.destination,null) != null ? var.vpc_peering_connections[route.destination].id : route.destination
+      lookup(var.vpc_peering_connections,route.destination,null) != null ? var.vpc_peering_connections[route.destination].id : route.destination =>
       {
         "cidr_block"                 = length(regexall("\\.",route.target)) > 0 ? route.target : null
         "ipv6_cidr_block"            = length(regexall(":",route.target)) > 0 ? route.target : null
@@ -72,7 +72,7 @@ locals {
   vpc_endpoint_routes = {
     for route in item.routes: 
       #Must set destination in route to either the key of a VPC endpoint in the var.vpc_endpoints variable, or the ID of a VPC endpoint
-      lookup(var.vpc_endpoints,route.destination,null) != null ? var.vpc_endpoints[route.destination].id : route.destination
+      lookup(var.vpc_endpoints,route.destination,null) != null ? var.vpc_endpoints[route.destination].id : route.destination =>
       {
         "cidr_block"                 = length(regexall("\\.",route.target)) > 0 ? route.target : null
         "ipv6_cidr_block"            = length(regexall(":",route.target)) > 0 ? route.target : null
@@ -85,7 +85,7 @@ locals {
   transit_gateway_routes = {
     for route in item.routes:
       #Must set destination in route to either the key of a Transit Gateway in the var.transit_gateways variable, or the ID of a Transit Gateway
-      lookup(var.transit_gateways,route.destination,null) != null ? var.transit_gateways[route.destination].id : route.destination
+      lookup(var.transit_gateways,route.destination,null) != null ? var.transit_gateways[route.destination].id : route.destination =>
       {
         "cidr_block"                 = length(regexall("\\.",route.target)) > 0 ? route.target : null
         "ipv6_cidr_block"            = length(regexall(":",route.target)) > 0 ? route.target : null
