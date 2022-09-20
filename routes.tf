@@ -9,7 +9,7 @@ locals {
   internet_gateway_routes = {
     for route in var.routes: 
       #If destination is set, we use that value. If not, we try to use vpc to pull the internet gateway
-      route.destination != null ? (lookup(var.internet_gateways,route.destination,null) != null ? var.internet_gateways[route.destination].id : route.destination) : var.internet_gateways[var.vpc].id => 
+      lookup(route,"destination",null) != null ? (lookup(var.internet_gateways,route.destination,null) != null ? var.internet_gateways[route.destination].id : route.destination) : var.internet_gateways[var.vpc].id => 
       {
         "cidr_block"                 = length(regexall("\\.",route.target)) > 0 ? route.target : null
         "ipv6_cidr_block"            = length(regexall(":",route.target)) > 0 ? route.target : null
@@ -22,7 +22,7 @@ locals {
   egress_only_internet_gateway_routes = {
     for route in var.routes: 
       #If destination is set, we use that value. If not, we try to use vpc to pull the egress only internet gateway
-      route.destination != null ? (lookup(var.egress_only_internet_gateways,route.destination,null) != null ? var.egress_only_internet_gateways[route.destination].id : route.destination) : var.egress_only_internet_gateways[var.vpc].id => 
+      lookup(route,"destination",null) != null ? (lookup(var.egress_only_internet_gateways,route.destination,null) != null ? var.egress_only_internet_gateways[route.destination].id : route.destination) : var.egress_only_internet_gateways[var.vpc].id => 
       {
         "ipv6_cidr_block"            = length(regexall(":",route.target)) > 0 ? route.target : null
         "destination_prefix_list_id" = length(regexall("^pl-",route.target)) > 0 ? route.target : null
@@ -34,7 +34,7 @@ locals {
   vpn_gateway_routes = {
     for route in var.routes: 
       #If destination is set, we use that value. If not, we try to use vpc to pull the VPN gateway (Virtual Private Gateway)
-      route.destination != null ? (lookup(var.vpn_gateways,route.destination,null) != null ? var.vpn_gateways[route.destination].id : route.destination) : var.vpn_gateways[var.vpc].id => 
+      lookup(route,"destination",null) != null ? (lookup(var.vpn_gateways,route.destination,null) != null ? var.vpn_gateways[route.destination].id : route.destination) : var.vpn_gateways[var.vpc].id => 
       {
         "cidr_block"                 = length(regexall("\\.",route.target)) > 0 ? route.target : null
         "ipv6_cidr_block"            = length(regexall(":",route.target)) > 0 ? route.target : null
